@@ -1,9 +1,9 @@
 fun main() {
     fun part1(input: List<String>): Int = input.sumOf {
-        it.filter {
-            c -> c.isDigit()
+        it.filter { c ->
+            c.isDigit()
         }.let { digits ->
-            if(digits.isNotBlank()){
+            if (digits.isNotBlank()) {
                 digits.first().digitToInt() * 10 + digits.last().digitToInt()
             } else {
                 0
@@ -23,17 +23,15 @@ fun main() {
             "eight" to "8",
             "nine" to "9"
         )
-        val input1 = input.map {
-            val last = it.findLastAnyOf(wordToDigitMap.keys)
-            val first = it.findAnyOf(wordToDigitMap.keys)
-            first?.let { it1 ->
-                it.replaceRange(it1.first, it1.first+1, wordToDigitMap[first.second]!!).let { it2 ->
-                    last?.let { it3 ->
-                        it2.replaceRange(it3.first, it3.first+1, wordToDigitMap[last.second]!!)
-                    } ?: it2
-            } } ?: it
-        }
-        return part1(input1)
+        return part1(input.map {
+            it.findAnyOf(wordToDigitMap.keys)?.let { first ->
+                it.replaceRange(first.first, first.first + 1, wordToDigitMap[first.second]!!).let { result ->
+                    it.findLastAnyOf(wordToDigitMap.keys)?.let { last ->
+                        result.replaceRange(last.first, last.first + 1, wordToDigitMap[last.second]!!)
+                    } ?: result
+                }
+            } ?: it
+        })
     }
 
     val testInput1 = readInput("Day01_1_test")
